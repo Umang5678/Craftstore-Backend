@@ -13,7 +13,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:3001", // local frontend
-      "https://your-frontend-domain.vercel.app",
+      "https://craftstore-frontend.vercel.app",
       "https://craftstore-admin.vercel.app", // when deployed
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
