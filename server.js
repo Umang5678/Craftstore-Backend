@@ -11,8 +11,10 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
+      "http://localhost:3000",
       "http://localhost:3001", // local frontend
-      "https://your-frontend-domain.vercel.app", // when deployed
+      "https://your-frontend-domain.vercel.app",
+      "https://craftstore-admin.vercel.app", // when deployed
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
