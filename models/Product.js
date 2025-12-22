@@ -11,8 +11,9 @@ const productSchema = new mongoose.Schema(
       enum: [
         "Wall Clock",
         "Money Bank",
-        "Car Stand ",
-        " Wall Art Piece",
+        "Car Stand",
+        "Wall Art Piece",
+        "Card Holder",
         "Key Holder Stand",
         "Wooden Hamper Box",
         "Gifting Box",
