@@ -1,48 +1,3 @@
-// const Product = require("../models/Product");
-
-// // ➕ Add a new product
-// exports.createProduct = async (req, res) => {
-//   try {
-//     const product = new Product(req.body);
-//     await product.save();
-//     res.json({ message: "Product added successfully", product });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-// // 📦 Get all products
-// exports.getProducts = async (req, res) => {
-//   try {
-//     const products = await Product.find();
-//     res.json(products);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-// // 🗑️ Delete a product
-// exports.deleteProduct = async (req, res) => {
-//   try {
-//     const deleted = await Product.findByIdAndDelete(req.params.id);
-//     res.json({ message: "Product deleted", deleted });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-// // ✏️ Update a product
-// exports.updateProduct = async (req, res) => {
-//   try {
-//     const updated = await Product.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//     });
-//     res.json({ message: "Product updated", updated });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
 const Product = require("../models/Product");
 
 // ➕ Add product
@@ -74,7 +29,7 @@ exports.updateProduct = async (req, res) => {
       updatedData,
       {
         new: true,
-      }
+      },
     );
 
     res.json({ message: "Product updated", updated });
@@ -93,10 +48,45 @@ exports.getProductById = async (req, res) => {
 };
 
 // 📦 Get all products
+// exports.getProducts = async (req, res) => {
+//   try {
+//     const products = await Product.find();
+//     res.json(products);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+// 📦 Get products (FAST: pagination + filter)
 exports.getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
-    res.json(products);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const skip = (page - 1) * limit;
+
+    const category = req.query.category;
+
+    // 🔍 Filter
+    let filter = {};
+    if (category && category !== "All") {
+      filter.category = category;
+    }
+
+    // 📦 Fetch products
+    const products = await Product.find(filter)
+      .select("name price image category createdAt") // IMPORTANT
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    // 🔢 Count total
+    const total = await Product.countDocuments(filter);
+
+    res.json({
+      products,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
