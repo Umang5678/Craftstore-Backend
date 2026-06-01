@@ -14,6 +14,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:3001", // local frontend
       "https://craftstore-frontend.vercel.app",
+      "https://craftstore-frontend-umang-sheladiyas-projects.vercel.app/"
       "https://craftstore-admin.vercel.app", // when deployed
       "https://thecrafistore.com",
       "https://www.thecrafistore.com",
